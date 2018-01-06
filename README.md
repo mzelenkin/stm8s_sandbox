@@ -16,5 +16,8 @@
 
 В каждой директории расположен один проект. 
 
-Все собирается компилятором [SDCC](http://sdcc.sourceforge.net) под GNU Linux. Также вам потребуется Standart Peripheral Library (SPL) с [сайта STM](www.st.com) и наложить [патч](https://github.com/gicking/STM8-SPL_SDCC_patch). Cсылка на SPL не приводится, потому что ссылки потоянно меняются, пользуйтесь поиском.
+Все собирается компилятором [SDCC](http://sdcc.sourceforge.net) под GNU Linux. Также вам потребуется скачать Standart Peripheral Library (SPL) с [сайта STM](www.st.com) и наложить [патч](https://github.com/gicking/STM8-SPL_SDCC_patch). Cсылка на SPL не приводится, потому что ссылки потоянно меняются, пользуйтесь поиском.
 
+Для сборки достаточно запустить ```make``` в нужной директории.
+
+Прошивка осуществляется с помощью команды ```make flash```

@@ -1,24 +1,35 @@
+# настройки проекта
+SPD_DIR=../STM8S_StdPeriph_Lib/Libraries/STM8S_StdPeriph_Driver/
+SPD_SOURCES = $(SPD_DIR)src
+INCLUDES = -I. -I $(SPD_DIR)inc
+
 # Compiler
 CC = sdcc
-PLATFORM = stm8
-CPU=STM8S103
-PNAME = blink
+LDFLAGS = -mstm8 -lstm8 
+CFLAGS = -c -DSTM8S103 $(LDFLAGS)
 BUILD_DIR = build/
-INCLUDES = -I. -I ../STM8S_StdPeriph_Lib/Libraries/STM8S_StdPeriph_Driver/inc
-SPD_SOURCES = ../STM8S_StdPeriph_Lib/Libraries/STM8S_StdPeriph_Driver/src
+OBJECTS = $(BUILD_DIR)stm8s_gpio.rel $(BUILD_DIR)main.rel
+FIRMWARE = $(BUILD_DIR)main.ihx
 
 # Flash
 FLASHER = stm8flash
-FPROGER = stlinkv2
-FPLATFORM=stm8s103f3
+FLFLAGS = -cstlinkv2 -pstm8s103f3
 
-build:
-#	$(CC) -c -o$(BUILD_DIR) -m$(PLATFORM) -l$(PLATFORM) -D$(CPU) $(INCLUDES) $(SPD_SOURCES)/stm8s_it.c
-	$(CC) -c -o$(BUILD_DIR) -m$(PLATFORM) -l$(PLATFORM) -D$(CPU) $(INCLUDES) $(SPD_SOURCES)/stm8s_gpio.c
-	$(CC) -c -o$(BUILD_DIR) -m$(PLATFORM) -l$(PLATFORM) -D$(CPU) $(INCLUDES) main.c
-	
-	$(CC) -m$(PLATFORM) -o$(BUILD_DIR) $(BUILD_DIR)*.rel
+all: $(FIRMWARE)
+
+$(FIRMWARE): $(OBJECTS)
+#	$(CC) -c -o$(BUILD_DIR) -m$(PLATFORM) -l$(PLATFORM) -D$(CPU) $(INCLUDES) $(SPD_SOURCES)/stm8s_it.c	
+	$(CC) $(LDFLAGS) -o$(BUILD_DIR) $(BUILD_DIR)*.rel
+
+$(BUILD_DIR)stm8s_gpio.rel:
+	$(CC) $(CFLAGS) -o$(BUILD_DIR)  $(INCLUDES) $(SPD_SOURCES)/stm8s_gpio.c
+
+$(BUILD_DIR)main.rel: $(BUILD_DIR)stm8s_gpio.rel main.c
+	$(CC) $(CFLAGS) -o$(BUILD_DIR) -m$(PLATFORM) -l$(PLATFORM) -D$(CPU) $(INCLUDES) main.c
 
 flash:
-	$(FLASHER) -c$(FPROGER) -p$(FPLATFORM) -w $(BUILD_DIR)main.ihx
+	$(FLASHER) $(FLFLAGS) -w $(FIRMWARE)
 
+clean:
+	rm -rf $(BUILD_DIR)
+	mkdir $(BUILD_DIR)
