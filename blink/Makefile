@@ -24,6 +24,7 @@ $(FIRMWARE): $(OBJECTS)
 $(BUILD_DIR)stm8s_gpio.rel:
 	$(CC) $(CFLAGS) -o$(BUILD_DIR)  $(INCLUDES) $(SPD_SOURCES)/stm8s_gpio.c
 
+
 $(BUILD_DIR)main.rel: $(BUILD_DIR)stm8s_gpio.rel main.c
 	$(CC) $(CFLAGS) -o$(BUILD_DIR) -m$(PLATFORM) -l$(PLATFORM) -D$(CPU) $(INCLUDES) main.c
 
