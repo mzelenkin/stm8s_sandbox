@@ -14,6 +14,8 @@
  *      | PB4             |
  *      |-----------------+
  * -----                  |
+ *                         \
+ *                        |
  *                       ---
  * 
  * @author Mikhail Zelenkin <mzelenkin@mail.ru>
